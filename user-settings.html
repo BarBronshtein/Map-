@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="css/style.css" />
+    <title>User Settings</title>
+  </head>
+  <body>
+    <!-- Header -->
+
+    <!-- Form -->
+    <form onsubmit="save(event)">
+      <label for="email"
+        >E-Mail: <input required type="email" name="email" id="email"
+      /></label>
+      <label
+        >Age:<input
+          type="range"
+          min="18"
+          max="90"
+          name="age"
+          value="18"
+          onchange="showAge(this.value)"
+        /><span class="span-age">18</span></label
+      >
+      <h3 class="headline">Colors</h3>
+      <label>Set Background Color: <input type="color" name="bg-color" id="" /></label>
+      <label>Set Text Color: <input type="color" name="color" id="" /></label>
+      <label>Birth Date <input required type="date" name="date" id="" /></label>
+      <label>Birth Time <input required type="time" name="time" id="" /></label>
+      <button class="btn set">Set</button>
+    </form=>
+    <script src="src/services/utilService.js"></script>
+    <script src="src/services/userService.js"></script>
+    <script src="src/services/storageService.js"></script>
+    <script src="src/controller.js"></script>
+  </body>
+</html>
