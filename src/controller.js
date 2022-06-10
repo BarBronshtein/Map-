@@ -22,13 +22,9 @@ function onSetLoc() {
 }
 function onAddMarker(ev) {
   const name = prompt('Enter Place Name:');
-  const mark = new google.maps.Marker({
-    map: getMap(),
-    position: ev.latLng,
-    lat: ev.latLng.lat(),
-    lng: ev.latLng.lng(),
-  });
-  addMarker(mark, name);
+  const lat = ev.latLng.lat();
+  const lng = ev.latLng.lng();
+  addMarker({ lat, lng, name });
   renderPlaces();
 }
 
@@ -37,7 +33,7 @@ function renderPlaces() {
   let strHTML = '';
   places.forEach(
     place =>
-      (strHTML += `<a onclick="moveTo({lat:${place.lat},lng:${place.lng}})">${place.name} <span onclick="onDeletePlace(place.id)" class="del-place">X</span></a>`)
+      (strHTML += `<a href="#" onclick="moveTo({lat:${place.lat},lng:${place.lng}})">${place.name} <span onclick="onDeletePlace('${place.id}')" class="del-place">X</span></a>`)
   );
   document.querySelector('.places-container').innerHTML = strHTML;
 }

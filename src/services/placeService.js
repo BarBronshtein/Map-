@@ -2,15 +2,10 @@
 
 const GOOGLE_MAP_KEY = 'AIzaSyByW4arVVCXU_wA07K5a2jrwLUJOKX64J4';
 const PLACE_STORAGE_KEY = 'placesDB';
-
+const gMarkers = [];
 let gMap;
-const place = {
-  id: 1,
-  lat: 0,
-  lng: 0,
-  name: 'my house',
-};
-const gPlaces = [];
+const place = {};
+let gPlaces = [];
 
 function getMap() {
   return gMap;
@@ -22,6 +17,10 @@ function initMap() {
     zoom: 14,
   });
   gMap.addListener('click', onAddMarker);
+  const places = loadFromStorage(PLACE_STORAGE_KEY);
+  if (!places || !places.length) return;
+  places.forEach(addMarker);
+  renderPlaces();
 }
 
 function getCurPos() {
@@ -34,18 +33,33 @@ function getUserLoc(location) {
   gMap.setCenter(position);
 }
 
-function addMarker(mark, name) {
-  const place = {};
-  place.name = name;
-  place.lat = mark.lat;
-  place.lng = mark.lng;
+function addMarker({ lat, lng, name, id }) {
+  const place = {
+    name,
+    lat,
+    lng,
+    id: id || makeId(),
+  };
   gPlaces.push(place);
+  const mark = new google.maps.Marker({
+    map: gMap,
+    position: { lat, lng },
+    lat,
+    lng,
+  });
+  mark.id = place.id;
+  gMarkers.push(mark);
   saveToStorage(PLACE_STORAGE_KEY, gPlaces);
 }
 
-function deletePlace(placeId) {
-  const idx = gPlaces.findIndex(place => place.id === placeId);
+function deletePlace(id) {
+  const idx = gPlaces.findIndex(place => place.id === id);
   gPlaces.splice(idx, 1);
+  console.log(gPlaces);
+  const index = gMarkers.findIndex(mark => mark.id === id);
+  const mark = gMarkers.splice(index, 1)[0];
+  mark.setMap(null);
+  saveToStorage(PLACE_STORAGE_KEY, gPlaces);
 }
 
 function moveTo(position) {
